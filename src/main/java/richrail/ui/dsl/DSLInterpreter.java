@@ -11,7 +11,10 @@ public class DSLInterpeter extends RichRailBaseListener {
     
 	@Override
 	public void exitNewtraincommand(NewtraincommandContext ctx) {
+	//	service.newTrein(ctx.ID().getText());
+		System.out.println(ctx.ID().getText());
 		System.out.println("nieuwe trein");
 	}
-	
+
+
 }
