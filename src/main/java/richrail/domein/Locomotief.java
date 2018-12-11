@@ -12,9 +12,10 @@ public class Locomotief implements ComponentType {
 		return vermogen;
 	}
 
-	public void setSpecialeWaarde(int waarde) {
-		vermogen = waarde;
-		
+	public void setSpecialeWaarde(int waarde) {vermogen = waarde;}
+
+	public int getSeats() {
+		return 0;
 	}
 
 	public String getType() {

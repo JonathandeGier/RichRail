@@ -11,7 +11,11 @@ public interface TreinService {
 	
 	public boolean addComponentToTrain(String treinNaam, RollingComponent component);
 	public RollingComponent getComponentFromTrain(String treinNaam, String componentNaam);
+	public RollingComponent getComponent(String componentNaam);
 	public boolean removeComponentFromTrain(String treinNaam, String componentNaam);
+
+	public int getNumWagonSeats(String name);
+	public int getNumTrainSeats(String name);
 	
 	public RollingComponent createRollingComponent(String name, int gewicht, String typeNaam, int specialeWaarde);
 	public RollingComponent createRollingComponent(String name, String typeNaam, int specialeWaarde);

@@ -15,7 +15,9 @@ public class VrachtComponent implements ComponentType {
 	public void setSpecialeWaarde(int waarde) {
 		lading = waarde;
 	}
-	
+
+	public int getSeats() {return 0;}
+
 	public String getType() {
 		return type;
 	}

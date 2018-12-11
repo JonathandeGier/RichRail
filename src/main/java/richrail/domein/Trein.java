@@ -27,6 +27,14 @@ public class Trein implements Iterable<RollingComponent> {
 		}
 		return null;
 	}
+
+	public int getNumOfSeats() {
+		int total = 0;
+		for(RollingComponent wagon : componenten) {
+			total += wagon.getNumberOfSeats();
+		}
+		return total;
+	}
 	
 	public boolean addRollingComonent(RollingComponent wagon) {
 		return componenten.add(wagon);

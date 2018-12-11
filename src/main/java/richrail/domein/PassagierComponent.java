@@ -15,7 +15,9 @@ public class PassagierComponent implements ComponentType {
 	public void setSpecialeWaarde(int waarde) {
 		zitplaatsen = waarde;
 	}
-	
+
+	public int getSeats() {return zitplaatsen;}
+
 	public String getType() {
 		return type;
 	}

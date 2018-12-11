@@ -6,6 +6,7 @@ public interface ComponentType {
 	
 	public int getSpecialeWaarde();
 	public void setSpecialeWaarde(int waarde);
+	public int getSeats();
 	
 	public String toString();
 }

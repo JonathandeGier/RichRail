@@ -42,13 +42,31 @@ public class TreinController implements TreinService {
 		Trein tr = getTrein(treinNaam);
 		return tr.getRollingComponent(componentNaam);
 	}
+
+	public RollingComponent getComponent(String componentNaam) {
+		RollingComponent wagon = null;
+		for(Trein tr : treinen) {
+			wagon = tr.getRollingComponent(componentNaam);
+			if(wagon != null) {return wagon;}
+		}
+		return wagon;
+	}
 	
 	public boolean removeComponentFromTrain(String treinNaam, String componentNaam) {
 		Trein tr = getTrein(treinNaam);
 		RollingComponent component = getComponentFromTrain(treinNaam, componentNaam);
 		return tr.removeRollingComponent(component);
 	}
-	
+
+	public int getNumWagonSeats(String name) {
+		return getComponent(name).getNumberOfSeats();
+	}
+
+	public int getNumTrainSeats(String name) {
+		Trein tr = getTrein(name);
+		return tr.getNumOfSeats();
+	}
+
 	public RollingComponent createRollingComponent(String name, int gewicht, String typeNaam, int specialeWaarde) {
 		ComponentType type = getComponentType(typeNaam, specialeWaarde);
 		RollingComponent wagon = new RollingComponent(name, type, gewicht);
