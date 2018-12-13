@@ -28,14 +28,18 @@ public class Trein implements Iterable<RollingComponent> {
 		return null;
 	}
 
-	public int getNumOfSeats() {
+	public List<RollingComponent> getComponenten() {
+		return componenten;
+	}
+
+	public int getTotalNumberOfSeats() {
 		int total = 0;
 		for(RollingComponent wagon : componenten) {
 			total += wagon.getNumberOfSeats();
 		}
 		return total;
 	}
-	
+
 	public boolean addRollingComonent(RollingComponent wagon) {
 		return componenten.add(wagon);
 	}
@@ -47,7 +51,7 @@ public class Trein implements Iterable<RollingComponent> {
 	public Iterator<RollingComponent> iterator() {
 		return componenten.iterator();
 	}
-	
+
 	public String toString() {
 		String s = "Trein " + name + " met:\n";
 		for(RollingComponent wagon : componenten) {

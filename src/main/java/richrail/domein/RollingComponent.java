@@ -22,7 +22,8 @@ public class RollingComponent {
 		this.name = name;
 	}
 	public int getNumberOfSeats() {return type.getSeats();}
-	
+	public ComponentType getComponentType() { return type; }
+
 	public boolean equals(Object o) {
 		boolean result = false;
 		if(o instanceof RollingComponent) {

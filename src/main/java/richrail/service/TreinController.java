@@ -63,7 +63,7 @@ public class TreinController implements TreinService {
 	public int getNumTrainSeats(String name) {
 		Trein tr = getTrein(name);
 		if(tr != null) {
-			return tr.getNumOfSeats();
+			return tr.getTotalNumberOfSeats();
 		}
 		return 0;
 	}

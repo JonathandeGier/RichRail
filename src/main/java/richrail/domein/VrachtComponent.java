@@ -18,7 +18,7 @@ public class VrachtComponent implements ComponentType {
 
 	public int getSeats() {return 0;}
 
-	public String getType() {
+	public String getTypeName() {
 		return type;
 	}
 	

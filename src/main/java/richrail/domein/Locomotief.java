@@ -18,7 +18,7 @@ public class Locomotief implements ComponentType {
 		return 0;
 	}
 
-	public String getType() {
+	public String getTypeName() {
 		return type;
 	}
 	
