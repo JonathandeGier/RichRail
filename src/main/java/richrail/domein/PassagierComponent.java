@@ -18,8 +18,6 @@ public class PassagierComponent implements ComponentType {
 
 	public int giveSeats() {return zitplaatsen;}
 
-	public void setSeats(int zitplaatsen) { this.zitplaatsen = zitplaatsen; }
-
 	public String getTypeName() {
 		return type;
 	}

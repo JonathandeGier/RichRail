@@ -1,19 +1,15 @@
 package richrail.persistence;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import richrail.service.TreinService;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.json.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFileDataSource extends FileDataSource {
 
-    protected final File ioFile = new File(super.dirPath + "treinen.json");
+    private final File ioFile = new File(super.dirPath + "treinen.json");
 
 
     private void processJsonInput(JsonArray array, TreinService service) {

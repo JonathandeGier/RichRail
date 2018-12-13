@@ -10,7 +10,7 @@ public class Trein implements Iterable<RollingComponent> {
 	
 	public Trein(String name) {
 		rename(name);
-		componenten = new ArrayList<RollingComponent>();
+		componenten = new ArrayList<>();
 	}
 	
 	public String getName() {return this.name;}
