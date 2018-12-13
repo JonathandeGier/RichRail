@@ -1,6 +1,7 @@
 package richrail.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import richrail.domein.ComponentType;
@@ -28,6 +29,10 @@ public class TreinController implements TreinService {
 			}
 		}
 		return null;
+	}
+
+	public List<Trein> getAlleTreinen() {
+		return Collections.unmodifiableList(treinen);
 	}
 	
 	public boolean removeTrain(String name) {
@@ -99,6 +104,10 @@ public class TreinController implements TreinService {
 			}
 		}
 		return wagon;
+	}
+
+	public List<RollingComponent> getAlleComponenten() {
+		return Collections.unmodifiableList(losseComponenten);
 	}
 
 	public boolean removeComponent(String componentNaam) {
