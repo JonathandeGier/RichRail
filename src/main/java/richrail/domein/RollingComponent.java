@@ -21,7 +21,7 @@ public class RollingComponent {
 	public void rename(String name) {
 		this.name = name;
 	}
-	public int getNumberOfSeats() {return type.getSeats();}
+	public int passNumberOfSeats() {return type.giveSeats();}
 	public ComponentType getComponentType() { return type; }
 
 	public boolean equals(Object o) {

@@ -60,7 +60,7 @@ public class TreinController implements TreinService {
 	public int getNumWagonSeats(String name) {
 		RollingComponent wagon = getComponent(name);
 		if(wagon != null) {
-			return wagon.getNumberOfSeats();
+			return wagon.passNumberOfSeats();
 		}
 		return 0;
 	}
@@ -68,7 +68,7 @@ public class TreinController implements TreinService {
 	public int getNumTrainSeats(String name) {
 		Trein tr = getTrein(name);
 		if(tr != null) {
-			return tr.getTotalNumberOfSeats();
+			return tr.calculateTotalNumberOfSeats();
 		}
 		return 0;
 	}

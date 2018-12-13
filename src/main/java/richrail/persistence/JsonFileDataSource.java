@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import richrail.service.TreinService;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.json.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,45 +15,34 @@ public class JsonFileDataSource extends FileDataSource {
 
     protected final File ioFile = new File(super.dirPath + "treinen.json");
 
-//    private JsonArray parseTreinenToJson(List<Trein> treinen) {
-//
-//        JsonArrayBuilder masterArrayBuilder = Json.createArrayBuilder();
-//
-//        for (Trein trein : treinen) {
-//
-//            JsonObjectBuilder treinObjectBuilder = Json.createObjectBuilder();
-//            treinObjectBuilder.add("naam", trein.getName());
-//            JsonArrayBuilder treinComponentArrayBuilder = Json.createArrayBuilder();
-//
-//            for (RollingComponent component : trein) {
-//
-//                JsonObjectBuilder componentObjectBuilder = Json.createObjectBuilder();
-//                componentObjectBuilder.add("naam", component.getName());
-//                componentObjectBuilder.add("gewicht", component.getGewicht());
-//                componentObjectBuilder.add("zitplaatsen", component.getNumberOfSeats());
-//                componentObjectBuilder.add("type", component.getType().getTypeName());
-//                componentObjectBuilder.add("typeWaarde", component.getType().getSpecialeWaarde());
-//                treinComponentArrayBuilder.add(componentObjectBuilder);
-//
-//            }
-//
-//            treinObjectBuilder.add("componenten", treinComponentArrayBuilder);
-//            masterArrayBuilder.add(treinObjectBuilder);
-//
-//        }
-//
-//        return masterArrayBuilder.build();
-//    }
 
-//    public List<Trein> parseJsonStringToTreinen(String jsonString) {
-//        JsonReader reader = Json.createReader(new StringReader(jsonString));
-//        JsonArray treinenArray = reader.readArray();
-//        reader.close();
-//
-//        System.out.println(treinenArray.toString());
-//
-//        return null;
-//    }
+    private void processJsonInput(JsonArray array, TreinService service) {
+
+        for (int i=0;i<array.size();i++) {
+
+            JsonObject treinObject = array.getJsonObject(i);
+            String treinNaam = treinObject.getString("name");
+            service.newTrein(treinNaam);
+            JsonArray componentenArray = treinObject.getJsonArray("componenten");
+
+            for (int j=0;j<componentenArray.size();j++) {
+
+                JsonObject componentObject = componentenArray.getJsonObject(j);
+                String wagonNaam = componentObject.getString("name");
+                int wagonGewicht = componentObject.getInt("gewicht");
+
+                JsonObject typeObject = componentObject.getJsonObject("componentType");
+                String typeNaam = typeObject.getString("typeName");
+                int typeWaarde = typeObject.getInt("specialeWaarde");
+
+                service.createRollingComponent(wagonNaam, wagonGewicht, typeNaam, typeWaarde);
+                service.addComponentToTrain(treinNaam, wagonNaam);
+
+            }
+
+        }
+
+    }
 
     private void checkForFile() {
         try {
@@ -69,23 +60,16 @@ public class JsonFileDataSource extends FileDataSource {
 
     @Override
     public void saveTreinen(TreinService service) {
-        //try {
+        try {
 
             ObjectMapper jsonMapper = new ObjectMapper();
             checkForFile(); // Checkt of de file bestaat en maakt hem eventueel aan.
-            //jsonMapper.writeValue(ioFile, service.getTreinen());
+            jsonMapper.writeValue(ioFile, service.getAlleTreinen());
 
-        /*
-        } catch (JsonGenerationException exception) {
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-        } catch (JsonMappingException exception) {
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
             exception.printStackTrace();
-        }*/
+        }
 
     }
 
@@ -98,9 +82,8 @@ public class JsonFileDataSource extends FileDataSource {
             JsonArray treinenArray = jsonReader.readArray();
             jsonReader.close();
             inputFile.close();
-            for (int i=0;i<treinenArray.size();i++) {
-                JsonObject treinObject = treinenArray.getJsonObject(i);
-            }
+
+            processJsonInput(treinenArray, service);
 
         } catch (IOException exception) {
             exception.printStackTrace();

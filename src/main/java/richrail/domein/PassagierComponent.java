@@ -16,7 +16,7 @@ public class PassagierComponent implements ComponentType {
 		zitplaatsen = waarde;
 	}
 
-	public int getSeats() {return zitplaatsen;}
+	public int giveSeats() {return zitplaatsen;}
 
 	public void setSeats(int zitplaatsen) { this.zitplaatsen = zitplaatsen; }
 

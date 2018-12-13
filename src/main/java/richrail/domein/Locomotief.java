@@ -14,7 +14,7 @@ public class Locomotief implements ComponentType {
 
 	public void setSpecialeWaarde(int waarde) {vermogen = waarde;}
 
-	public int getSeats() {
+	public int giveSeats() {
 		return 0;
 	}
 
