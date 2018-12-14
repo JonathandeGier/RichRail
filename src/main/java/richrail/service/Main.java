@@ -1,5 +1,7 @@
 package richrail.service;
 
+import richrail.ui.java.MainWindow;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -18,7 +20,8 @@ public class Main {
 		service.addComponentToTrain("tr1", service.createRollingComponent("wg7", "vrachtcomponent", 3000));
 		
 		System.out.println(service.getTrein("tr1").toString());
-		
+
+		new MainWindow();
 	}
 
 }

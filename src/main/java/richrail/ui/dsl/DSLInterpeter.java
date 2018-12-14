@@ -1,3 +1,4 @@
+/*
 package richrail.ui.dsl;
 
 import parser.RichRailBaseListener;
@@ -15,3 +16,4 @@ public class DSLInterpeter extends RichRailBaseListener {
 	}
 	
 }
+*/
