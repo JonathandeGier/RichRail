@@ -11,8 +11,8 @@ public class TreinController implements TreinService {
 	private static List<RollingComponent> losseComponenten;
 	
 	public TreinController() {
-		treinen = new ArrayList<Trein>();
-		losseComponenten = new ArrayList<RollingComponent>();
+		treinen = new ArrayList<>();
+		losseComponenten = new ArrayList<>();
 	}
 	
 	public boolean newTrein(String name) {
@@ -58,7 +58,7 @@ public class TreinController implements TreinService {
 	public int getNumWagonSeats(String name) {
 		RollingComponent wagon = getComponent(name);
 		if(wagon != null) {
-			return wagon.getNumberOfSeats();
+			return wagon.passNumberOfSeats();
 		}
 		return 0;
 	}
@@ -66,7 +66,7 @@ public class TreinController implements TreinService {
 	public int getNumTrainSeats(String name) {
 		Trein tr = getTrein(name);
 		if(tr != null) {
-			return tr.getTotalNumberOfSeats();
+			return tr.calculateTotalNumberOfSeats();
 		}
 		return 0;
 	}
@@ -110,7 +110,7 @@ public class TreinController implements TreinService {
 
 	public boolean removeComponent(String componentNaam) {
 		RollingComponent wagon = getComponent(componentNaam);
-		return treinen.remove(wagon) || losseComponenten.remove(wagon);
+		return treinen.remove(wagon) || losseComponenten.remove(wagon); //TODO: loop treinen en verwijder de wagon i.p.v. wagon uit treinen lijst verwijderen
 	}
 
 	private ComponentType getComponentType(String typeNaam, int specialeWaarde) {

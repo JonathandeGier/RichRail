@@ -10,7 +10,7 @@ public class Trein implements Iterable<RollingComponent> {
 	
 	public Trein(String name) {
 		rename(name);
-		componenten = new ArrayList<RollingComponent>();
+		componenten = new ArrayList<>();
 	}
 	
 	public String getName() {return this.name;}
@@ -32,10 +32,10 @@ public class Trein implements Iterable<RollingComponent> {
 		return componenten;
 	}
 
-	public int getTotalNumberOfSeats() {
+	public int calculateTotalNumberOfSeats() {
 		int total = 0;
 		for(RollingComponent wagon : componenten) {
-			total += wagon.getNumberOfSeats();
+			total += wagon.passNumberOfSeats();
 		}
 		return total;
 	}
