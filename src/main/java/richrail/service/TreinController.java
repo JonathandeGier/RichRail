@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import richrail.domein.ComponentType;
-import richrail.domein.RollingComponent;
-import richrail.domein.Trein;
+import richrail.domein.*;
 
 public class TreinController implements TreinService {
 	private static List<Trein> treinen;
