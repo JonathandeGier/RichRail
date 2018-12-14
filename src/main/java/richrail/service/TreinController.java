@@ -9,10 +9,12 @@ import richrail.domein.*;
 public class TreinController implements TreinService {
 	private static List<Trein> treinen;
 	private static List<RollingComponent> losseComponenten;
+	private static List<TreinEventListener> listeners;
 	
 	public TreinController() {
 		treinen = new ArrayList<>();
 		losseComponenten = new ArrayList<>();
+		listeners = new ArrayList<>();
 	}
 	
 	public boolean newTrein(String name) {
@@ -141,6 +143,18 @@ public class TreinController implements TreinService {
 		ComponentTypeFactory factory = new TypeBasedComponentTypeFactory(typeNaam);										// FACTORY METHOD!!!
 		return factory.createComponentType(specialeWaarde);
 	}
+
+	public void subscribeToChanges(TreinEventListener listener) { listeners.add(listener); }
+	public void unsubscribeFromChanges(TreinEventListener listener) { listeners.remove(listener); }
+
+	public void notifyListeners(String message) {
+
+		for (TreinEventListener listener : listeners) {
+			listener.update(message);
+		}
+
+	}
+
 }
 
 
