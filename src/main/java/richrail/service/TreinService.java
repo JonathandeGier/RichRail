@@ -26,4 +26,8 @@ public interface TreinService {
 	RollingComponent getComponent(String componentNaam);
 	List<RollingComponent> getAlleComponenten();
 	boolean removeComponent(String componentNaam);
+
+	void subscribeToChanges(TreinEventListener listener);
+	void unsubscribeFromChanges(TreinEventListener listener);
+	void notifyListeners(String message);
 }
