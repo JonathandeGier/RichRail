@@ -11,7 +11,7 @@ public class TrainPanel extends JPanel {
         trainName = name;
     }
     public Dimension getPreferredSize() {
-        return new Dimension(100,200);
+        return new Dimension(100,100);
     }
 
     public void paintComponent(Graphics g) {
@@ -27,7 +27,6 @@ public class TrainPanel extends JPanel {
         g.setColor(Color.RED);
         g.fillRect(20, 40 , 80, 25);
         g.fillRect(70, 30 , 30, 10);
-        System.out.println(trainName);
         g.setColor(Color.DARK_GRAY);
         g.drawString(trainName, 35, 55);
     }
