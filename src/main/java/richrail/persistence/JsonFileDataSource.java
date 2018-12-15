@@ -11,14 +11,17 @@ public class JsonFileDataSource extends FileDataSource {
 
     private final File ioFile = new File(super.dirPath + "treinen.json");
 
+    public JsonFileDataSource(TreinService service) {
+        super(service);
+    }
 
-    private void processJsonInput(JsonArray array, TreinService service) {
+    private void processJsonInput(JsonArray array) {
 
         for (int i=0;i<array.size();i++) {
 
             JsonObject treinObject = array.getJsonObject(i);
             String treinNaam = treinObject.getString("name");
-            service.newTrein(treinNaam);
+            this.treinService.newTrein(treinNaam);
             JsonArray componentenArray = treinObject.getJsonArray("componenten");
 
             for (int j=0;j<componentenArray.size();j++) {
@@ -31,8 +34,8 @@ public class JsonFileDataSource extends FileDataSource {
                 String typeNaam = typeObject.getString("typeName");
                 int typeWaarde = typeObject.getInt("specialeWaarde");
 
-                service.createRollingComponent(wagonNaam, wagonGewicht, typeNaam, typeWaarde);
-                service.addComponentToTrain(treinNaam, wagonNaam);
+                this.treinService.createRollingComponent(wagonNaam, wagonGewicht, typeNaam, typeWaarde);
+                this.treinService.addComponentToTrain(treinNaam, wagonNaam);
 
             }
 
@@ -55,12 +58,12 @@ public class JsonFileDataSource extends FileDataSource {
     }
 
     @Override
-    public void saveTreinen(TreinService service) {
+    public void saveTreinen() {
         try {
 
             ObjectMapper jsonMapper = new ObjectMapper();
             checkForFile(); // Checkt of de file bestaat en maakt hem eventueel aan.
-            jsonMapper.writeValue(ioFile, service.getAlleTreinen());
+            jsonMapper.writeValue(ioFile, super.treinService.getAlleTreinen());
 
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
@@ -70,7 +73,7 @@ public class JsonFileDataSource extends FileDataSource {
     }
 
     @Override
-    public void loadTreinen(TreinService service) {
+    public void loadTreinen() {
 
         try {
             FileReader inputFile = new FileReader(ioFile);
@@ -79,12 +82,17 @@ public class JsonFileDataSource extends FileDataSource {
             jsonReader.close();
             inputFile.close();
 
-            processJsonInput(treinenArray, service);
+            processJsonInput(treinenArray);
 
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void update(String message) {
+        saveTreinen();
     }
 
 }
