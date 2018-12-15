@@ -121,6 +121,7 @@ public class MainWindow {
 
         consoleButton.addActionListener(e -> {
             DslWindow dsl = new DslWindow(drawingService, trainRegisterService);
+            trainRegisterService.subscribeTreinService(dsl);
         });
 
         componentSelectionButton.addActionListener(e -> {
@@ -134,11 +135,18 @@ public class MainWindow {
         });
 
         componentCreationButton.addActionListener(e -> {
-            trainRegisterService.registerComponent(drawingPanel, mainFrame, componentNameField.getText(), selectedTrain, componentTypeSelectionDropdown.getItemAt(componentTypeSelectionDropdown.getSelectedIndex()), Integer.parseInt(componentWeightField.getText()), Integer.parseInt(componentSpecialField.getText()));
-            trainRegisterService.fillComboBox(componentSelectionDropdown, selectedTrain);
-            componentSpecialField.setText("");
-            componentWeightField.setText("");
-            componentNameField.setText("");
+            try {
+                trainRegisterService.registerComponent(drawingPanel, mainFrame, componentNameField.getText(), selectedTrain, componentTypeSelectionDropdown.getItemAt(componentTypeSelectionDropdown.getSelectedIndex()), Integer.parseInt(componentWeightField.getText()), Integer.parseInt(componentSpecialField.getText()));
+                trainRegisterService.fillComboBox(componentSelectionDropdown, selectedTrain);
+                componentSpecialField.setText("");
+                componentWeightField.setText("");
+                componentNameField.setText("");
+                componentSpecialField.setBackground(Color.white);
+                componentWeightField.setBackground(Color.white);
+            } catch (Exception s){
+                componentSpecialField.setBackground(Color.red);
+                componentWeightField.setBackground(Color.red);
+            }
         });
 
         // Add panels to the main screen
@@ -164,6 +172,9 @@ public class MainWindow {
         trainEditPanel.add(componentSpecialField);
         trainEditPanel.add(componentWeightField);
         trainEditPanel.add(componentCreationButton);
+
+        // ToDo: Functie voor frank
+        trainRegisterService.refreshTrain(drawingPanel, mainFrame);
 
         // Draw all the trains
         drawingService.drawTrains(drawingPanel, mainFrame);

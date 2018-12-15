@@ -1,6 +1,7 @@
 package richrail.ui.java;
 
 import richrail.domein.Trein;
+import richrail.service.TreinEventListener;
 import richrail.service.TreinService;
 
 import javax.swing.*;
@@ -54,6 +55,11 @@ public class TrainRegisterService {
         drawingService.drawTrains(panel, frame);
     }
 
+    public void refreshTrain(JPanel panel, JFrame frame) {
+        drawingService.clearPanel(panel);
+        drawingService.drawTrains(panel, frame);
+    }
+
     public void deleteComponent(JPanel panel, JFrame frame, String trainName, String componentName) {
         treinService.removeComponentFromTrain(trainName, componentName);
         drawingService.clearPanel(panel);
@@ -64,7 +70,10 @@ public class TrainRegisterService {
         treinService.createRollingComponent(wagonName, weight, type, special);
         treinService.addComponentToTrain(trainName, wagonName);
         drawingService.drawComponent(panel, frame, wagonName, trainName, type);
+    }
 
+    public void subscribeTreinService(TreinEventListener tel) {
+        treinService.subscribeToChanges(tel);
     }
 
 }

@@ -49,7 +49,7 @@ public class DrawingService {
                 }
             }
         }
-        wagonConstraint.gridx = wagonCounter + 1;
+        wagonConstraint.gridx = wagonCounter;
         wagonConstraint.gridy = trainCounter;
         if(type == "locomotive") {
             panel.add(trainFactory(wagonName), wagonConstraint);
