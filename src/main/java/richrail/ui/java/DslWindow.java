@@ -46,21 +46,19 @@ public class DslWindow implements TreinEventListener {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     output.setFont(new Font("console", Font.ITALIC, 11));
                     output.append(input.getText() + "\n");
-                    //DSLMain.interpret(input.getText());
+                    DSLMain.interpret(input.getText());
                     input.setText("");
                 }
             }
 
             @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
+            public void keyTyped(KeyEvent e) { }
             @Override
-            public void keyReleased(KeyEvent e) {
-            }
+            public void keyReleased(KeyEvent e) { }
+
         });
         // Finalize frame creation
-        mainFrameDsl.setSize(200, 200);
+        mainFrameDsl.setSize(400, 225);
         mainFrameDsl.setVisible(true);
     }
 

@@ -1,14 +1,11 @@
 package richrail.ui.java;
 
-import richrail.domein.Trein;
+import richrail.service.TreinEventListener;
 import richrail.service.TreinService;
 
 import java.awt.*;
 
 import javax.swing.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainWindow {
@@ -55,9 +52,9 @@ public class MainWindow {
         scrollDrawingPanel.setPreferredSize(new Dimension(400, 200));
 
         // Create a dropdown selection menu for the Trains
-        JComboBox<String> trainSelectionDropdown = new JComboBox<String>();
-        JComboBox<String> componentSelectionDropdown = new JComboBox<String>();
-        JComboBox<String> componentTypeSelectionDropdown = new JComboBox<String>();
+        JComboBox<String> trainSelectionDropdown = new JComboBox<>();
+        JComboBox<String> componentSelectionDropdown = new JComboBox<>();
+        JComboBox<String> componentTypeSelectionDropdown = new JComboBox<>();
 
         // Add a label to show the selected train
         JLabel trainSelectionLabel = new JLabel("No train selected...");
@@ -104,6 +101,7 @@ public class MainWindow {
 
         // Set action listener, to raise frame
         trainCreationButton.addActionListener(e -> {
+
             trainRegisterService.registerTrain(drawingPanel, mainFrame, trainNameField.getText());
             trainRegisterService.fillComboBox(trainSelectionDropdown, "all");
         });
@@ -121,7 +119,7 @@ public class MainWindow {
 
         consoleButton.addActionListener(e -> {
             DslWindow dsl = new DslWindow(drawingService, trainRegisterService);
-            trainRegisterService.subscribeTreinService(dsl);
+            trainRegisterService.subscribeTreinService( (TreinEventListener) dsl);
         });
 
         componentSelectionButton.addActionListener(e -> {

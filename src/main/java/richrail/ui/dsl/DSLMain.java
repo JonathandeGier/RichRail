@@ -25,7 +25,7 @@ public class DSLMain {
         sc.close();
     }
 
-    private static void interpret(String text) {
+    public static void interpret(String text) {
         CharStream lineStream = CharStreams.fromString(text);
 
         // Tokenize / Lexical analysis
