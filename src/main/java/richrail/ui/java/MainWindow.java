@@ -8,23 +8,29 @@ import java.awt.*;
 import javax.swing.*;
 
 
-public class MainWindow {
+public class MainWindow implements TreinEventListener {
 
-    private String selectedTrain;
-    private String selectedComponent;
+    private String selectedTrain, selectedComponent;
 
     private DrawingService drawingService;
-    private TrainRegisterService trainRegisterService;
 
-    public MainWindow(DrawingService drawingServiceUsed, TrainRegisterService trainRegisterServiceUsed){
+    private TreinService treinService;
+
+    private JFrame mainFrame;
+    private JPanel drawingPanel;
+
+    private JComboBox<String> trainSelectionDropdown, componentSelectionDropdown, componentTypeSelectionDropdown;
+
+    public MainWindow(DrawingService drawingServiceUsed, TreinService service){
         drawingService = drawingServiceUsed;
-        trainRegisterService = trainRegisterServiceUsed;
+        treinService = service;
         mainFrame();
     }
 
+
     private void mainFrame(){
         // Create frame for the main screen
-        JFrame mainFrame = new JFrame("Rich Rail");
+        mainFrame = new JFrame("Rich Rail");
         mainFrame.getContentPane().setLayout(new BorderLayout());
 
         // Create a GridBag Layout for the drawing panel
@@ -36,7 +42,7 @@ public class MainWindow {
         drawGrid.columnWidths = new int[] {1, 1, 1, 1};
 
         // Create 4 seperate panels for each of the different components
-        JPanel drawingPanel = new JPanel(drawGrid);
+        drawingPanel = new JPanel(drawGrid);
         JPanel componentPanel = new JPanel(new FlowLayout());
         JPanel trainSelectPanel = new JPanel(new FlowLayout());
         JPanel trainEditPanel = new JPanel(new FlowLayout());
@@ -52,9 +58,9 @@ public class MainWindow {
         scrollDrawingPanel.setPreferredSize(new Dimension(400, 200));
 
         // Create a dropdown selection menu for the Trains
-        JComboBox<String> trainSelectionDropdown = new JComboBox<>();
-        JComboBox<String> componentSelectionDropdown = new JComboBox<>();
-        JComboBox<String> componentTypeSelectionDropdown = new JComboBox<>();
+        trainSelectionDropdown = new JComboBox<>();
+        componentSelectionDropdown = new JComboBox<>();
+        componentTypeSelectionDropdown = new JComboBox<>();
 
         // Add a label to show the selected train
         JLabel trainSelectionLabel = new JLabel("No train selected...");
@@ -70,7 +76,8 @@ public class MainWindow {
         componentTypeSelectionDropdown.addItem("locomotief");
         componentTypeSelectionDropdown.addItem("vrachtcomponent");
         componentTypeSelectionDropdown.addItem("passagiercomponent");
-        trainRegisterService.fillComboBox(trainSelectionDropdown, "all");
+        updateTrainComboBox();
+        updateComponentenComboBox(selectedTrain);
 
         // Create text field
         JTextField trainNameField = new JTextField();
@@ -102,24 +109,27 @@ public class MainWindow {
         // Set action listener, to raise frame
         trainCreationButton.addActionListener(e -> {
 
-            trainRegisterService.registerTrain(drawingPanel, mainFrame, trainNameField.getText());
-            trainRegisterService.fillComboBox(trainSelectionDropdown, "all");
+            treinService.newTrein(trainNameField.getText());
+            //trainRegisterService.registerTrain(drawingPanel, mainFrame, trainNameField.getText());
+            //trainRegisterService.fillComboBox(trainSelectionDropdown, "all");
+            //fillComboBox(trainSelectionDropdown, "all");
         });
 
         trainSelectionButton.addActionListener(e -> {
             selectedTrain = trainSelectionDropdown.getItemAt(trainSelectionDropdown.getSelectedIndex());
             trainSelectionLabel.setText("Train geselecteerd: " + selectedTrain);
-            trainRegisterService.fillComboBox(componentSelectionDropdown, selectedTrain);
+            updateComponentenComboBox( selectedTrain );
+            //fillComboBox(componentSelectionDropdown, selectedTrain);
         });
 
         trainDeletionButton.addActionListener(e -> {
-            trainRegisterService.deleteTrain(drawingPanel, mainFrame, selectedTrain);
-            trainRegisterService.fillComboBox(trainSelectionDropdown, "all");
+            treinService.removeTrain(selectedTrain);
+            //fillComboBox(trainSelectionDropdown, "all");
         });
 
         consoleButton.addActionListener(e -> {
-            DslWindow dsl = new DslWindow(drawingService, trainRegisterService);
-            trainRegisterService.subscribeTreinService( (TreinEventListener) dsl);
+            DslWindow dsl = new DslWindow(treinService);
+            treinService.subscribeToChanges(dsl);
         });
 
         componentSelectionButton.addActionListener(e -> {
@@ -128,14 +138,19 @@ public class MainWindow {
         });
 
         componentDeletionButton.addActionListener(e -> {
-            trainRegisterService.deleteComponent(drawingPanel, mainFrame, selectedTrain, selectedComponent);
-            trainRegisterService.fillComboBox(componentSelectionDropdown, selectedTrain);
+            treinService.removeComponentFromTrain(selectedTrain, selectedComponent);
+            updateComponentenComboBox( selectedTrain );
         });
 
         componentCreationButton.addActionListener(e -> {
             try {
-                trainRegisterService.registerComponent(drawingPanel, mainFrame, componentNameField.getText(), selectedTrain, componentTypeSelectionDropdown.getItemAt(componentTypeSelectionDropdown.getSelectedIndex()), Integer.parseInt(componentWeightField.getText()), Integer.parseInt(componentSpecialField.getText()));
-                trainRegisterService.fillComboBox(componentSelectionDropdown, selectedTrain);
+                String wagonNaam = componentNameField.getText();
+                int wagonGewicht = Integer.parseInt(componentWeightField.getText());
+                String wagonType = componentTypeSelectionDropdown.getItemAt(componentTypeSelectionDropdown.getSelectedIndex());
+                int wagonSpecial = Integer.parseInt(componentSpecialField.getText());
+                treinService.createRollingComponent(wagonNaam, wagonGewicht, wagonType, wagonSpecial);
+                treinService.addComponentToTrain(selectedTrain, wagonNaam);
+                updateComponentenComboBox( selectedTrain );
                 componentSpecialField.setText("");
                 componentWeightField.setText("");
                 componentNameField.setText("");
@@ -171,15 +186,72 @@ public class MainWindow {
         trainEditPanel.add(componentWeightField);
         trainEditPanel.add(componentCreationButton);
 
-        // ToDo: Functie voor frank
-        trainRegisterService.refreshTrain(drawingPanel, mainFrame);
-
         // Draw all the trains
         drawingService.drawTrains(drawingPanel, mainFrame);
 
         // Finalize frame creation
         mainFrame.setSize(400, 500);
         mainFrame.setVisible(true);
+
+        // Exit program upon closing the frame
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    /*
+    private void fillComboBox(JComboBox<String> combo, String trainName) {
+        combo.removeAllItems();
+        if( trainName.equals("all") ) {
+            for(int i = 0; i < treinService.getAlleTreinen().size(); i++) {
+                combo.addItem(treinService.getAlleTreinen().get(i).getName());
+            }
+            combo.setSelectedIndex(treinService.getAlleTreinen().size() - 1);
+        } else {
+            int componentCounter = 0;
+            for(int i = 0; i < treinService.getAlleTreinen().size(); i++) {
+                if( treinService.getAlleTreinen().get(i).getName().equals(trainName) ) {
+                    for(int j = 0; j < treinService.getAlleTreinen().get(i).getComponenten().size(); j++)
+                        combo.addItem(treinService.getAlleTreinen().get(i).getComponenten().get(j).getName());
+                    componentCounter++;
+                }
+            }
+            try {
+                combo.setSelectedIndex(componentCounter - 1);
+            } catch (Exception e) {
+                System.out.println("Deze trein heeft 0 componenten.");
+            }
+        }
+    }
+    */
+
+    private void updateTrainComboBox() {
+        trainSelectionDropdown.removeAllItems();
+        for (int i=0; i < treinService.getAlleTreinen().size(); i++) {
+            trainSelectionDropdown.addItem(treinService.getAlleTreinen().get(i).getName());
+        }
+        trainSelectionDropdown.setSelectedIndex(trainSelectionDropdown.getItemCount() - 1);
+    }
+
+    private void updateComponentenComboBox(String trainName) {
+        int componentCounter = 0;
+        if (trainName == null) { return; }
+        for(int i = 0; i < treinService.getAlleTreinen().size(); i++) {
+            if( treinService.getAlleTreinen().get(i).getName().equals(trainName) ) {
+                for(int j = 0; j < treinService.getAlleTreinen().get(i).getComponenten().size(); j++)
+                    componentSelectionDropdown.addItem(treinService.getAlleTreinen().get(i).getComponenten().get(j).getName());
+                componentCounter++;
+            }
+        }
+        try {
+            componentSelectionDropdown.setSelectedIndex(componentCounter - 1);
+        } catch (Exception e) {
+            System.out.println("Deze trein heeft 0 componenten.");
+        }
+    }
+
+    public void update(String message) {
+        drawingService.clearPanel(drawingPanel);
+        drawingService.drawTrains(drawingPanel, mainFrame);
+        updateTrainComboBox();
     }
 
 }

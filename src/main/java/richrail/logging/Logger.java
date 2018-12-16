@@ -15,7 +15,7 @@ public class Logger implements TreinEventListener {
 
     public void update(String message) {
         String timeStamp = new SimpleDateFormat("[dd/MM/yyyy HH:mm:ss]").format(new Date()); // Neem de huidige tijd als string
-        logMessage(timeStamp + " "+ message +"\n");
+        logMessage(timeStamp + " "+ message + System.lineSeparator());
     }
 
     private void checkForFile() {

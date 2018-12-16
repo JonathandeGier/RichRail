@@ -29,5 +29,5 @@ public interface TreinService {
 
 	void subscribeToChanges(TreinEventListener listener);
 	void unsubscribeFromChanges(TreinEventListener listener);
-	void notifyListeners(String message);
+
 }

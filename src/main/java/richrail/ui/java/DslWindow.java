@@ -1,6 +1,7 @@
 package richrail.ui.java;
 
 import richrail.service.TreinEventListener;
+import richrail.service.TreinService;
 import richrail.ui.dsl.DSLMain;
 
 import javax.swing.*;
@@ -8,21 +9,18 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class DslWindow implements TreinEventListener {
-    private String selectedTrain;
-    private String selectedComponent;
 
-    private DrawingService drawingService;
-    private TrainRegisterService trainRegisterService;
+    private JTextArea output = new JTextArea(10, 40);
+    private JTextField input = new JTextField();
+    private TreinService service;
 
-    JTextArea output = new JTextArea(10, 40);
-    JTextField input = new JTextField();
-
-    public DslWindow(DrawingService drawingServiceUsed, TrainRegisterService trainRegisterServiceUsed){
-        drawingService = drawingServiceUsed;
-        trainRegisterService = trainRegisterServiceUsed;
+    public DslWindow(TreinService service){
         mainFrame();
+        this.service = service;
     }
 
     private void mainFrame(){
@@ -30,7 +28,7 @@ public class DslWindow implements TreinEventListener {
         JFrame mainFrameDsl = new JFrame("Rich Rail");
         mainFrameDsl.getContentPane().setLayout(new BorderLayout());
 
-        output.setPreferredSize(new Dimension(200, 100));
+        output.setPreferredSize(new Dimension(200, 150));
         input.setPreferredSize(new Dimension(200, 50));
 
         output.setBackground(Color.BLACK);
@@ -44,8 +42,6 @@ public class DslWindow implements TreinEventListener {
             @Override
             public void keyPressed(KeyEvent e){
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    output.setFont(new Font("console", Font.ITALIC, 11));
-                    output.append(input.getText() + "\n");
                     DSLMain.interpret(input.getText());
                     input.setText("");
                 }
@@ -60,12 +56,18 @@ public class DslWindow implements TreinEventListener {
         // Finalize frame creation
         mainFrameDsl.setSize(400, 225);
         mainFrameDsl.setVisible(true);
+        mainFrameDsl.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent event) {
+                service.unsubscribeFromChanges(DslWindow.this);
+                mainFrameDsl.dispose();
+            }
+        });
     }
 
 
     public void update(String message) {
-        output.setFont(new Font("console", Font.BOLD, 1));
+        output.setFont(new Font("console", Font.BOLD, 11));
         System.out.println(message);
-        output.append("     " + message + '\n');
+        output.append(message + '\n');
     }
 }

@@ -20,8 +20,9 @@ public class TreinController implements TreinService {
 	public boolean newTrein(String name) {
 		if(getTrein(name) == null) {																					// kijken of er al een trein is met dezelfde naam
 			Trein tr = new Trein(name);																					// nieuwe trein maken en toevoegen aan de list
+			boolean result = treinen.add(tr);
 			notifyListeners("Trein "+ name +" aangemaakt.");
-			return treinen.add(tr);
+			return result;
 		}
 		return false;
 	}
@@ -41,16 +42,18 @@ public class TreinController implements TreinService {
 	
 	public boolean removeTrain(String name) {																			// trein uit de list verwijderen
 		Trein tr = getTrein(name);
+		boolean result = treinen.remove(tr);
 		notifyListeners("Trein "+ name +" verwijderd.");
-		return treinen.remove(tr);
+		return result;
 	}
 	
 	public boolean addComponentToTrain(String treinNaam, String componentNaam) {
 		RollingComponent wagon = getComponent(componentNaam);															// wagon ophalen
 		Trein tr = getTrein(treinNaam);																					// trein ophalen
 		if(wagon != null && tr != null) {																				// testen of trein en wagon bestaan
+			boolean result = losseComponenten.remove(wagon) && tr.addRollingComonent(wagon);
 			notifyListeners("Component "+ componentNaam + " aan trein "+ treinNaam +" gekoppeld");
-			return losseComponenten.remove(wagon) && tr.addRollingComonent(wagon);										// wagon uit losseComponenten halen en aan trein toevoegen
+			return result;																								// wagon uit losseComponenten halen en aan trein toevoegen
 		}
 		return false;
 	}
@@ -67,8 +70,9 @@ public class TreinController implements TreinService {
 		Trein tr = getTrein(treinNaam);																					// trein ophalen
 		RollingComponent component = getComponentFromTrain(treinNaam, componentNaam);									// wagon ophalen
 		if(tr != null && component != null) {																			// testen of trein en wagon bestaan
+			boolean result = tr.removeRollingComponent(component) && losseComponenten.add(component);
 			notifyListeners("Component "+ componentNaam +" verwijderd van trein "+ treinNaam);
-			return tr.removeRollingComponent(component) && losseComponenten.add(component);								// wagon van trein afhalen en aan losseComponenten toevoegen
+			return result;																								// wagon van trein afhalen en aan losseComponenten toevoegen
 		}
 		return false;
 	}
@@ -95,8 +99,9 @@ public class TreinController implements TreinService {
 		}
 		ComponentType type = getComponentType(typeNaam, specialeWaarde);
 		RollingComponent wagon = new RollingComponent(name, type, gewicht);
+		boolean result = losseComponenten.add(wagon);
 		notifyListeners( typeNaam +" "+ name +" aangemaakt.");
-		return losseComponenten.add(wagon);
+		return result;
 	}
 	
 	public boolean createRollingComponent(String name, String typeNaam, int specialeWaarde) {							// hier kan een builder voor gemaakt worden, maar nu geen tijd voor
@@ -158,7 +163,7 @@ public class TreinController implements TreinService {
 		listeners.remove(listener);
 	}
 
-	public void notifyListeners(String message) {
+	private void notifyListeners(String message) {
 
 		for (TreinEventListener listener : listeners) {
 			listener.update(message);

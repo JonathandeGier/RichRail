@@ -1,5 +1,7 @@
 package richrail.ui.java;
 
+import richrail.domein.ComponentType;
+import richrail.domein.RollingComponent;
 import richrail.domein.Trein;
 import richrail.service.TreinService;
 
@@ -67,17 +69,28 @@ public class DrawingService {
         int wagonCounter = 0;
         for(int i = 0; i < treinenList.size(); i++) {
             trainConstraint.gridy = i;
-            panel.add(trainFactory(treinenList.get(i).getName()), trainConstraint);
+            //panel.add(trainFactory(treinenList.get(i).getName()), trainConstraint);
             for(int j = 0; j < treinenList.get(i).getComponenten().size(); j++) {
                 wagonConstraint.gridy = i;
                 wagonConstraint.gridx = j + 1;
-                System.out.println(i + treinenList.get(i).getName() + treinenList.get(i).getComponenten().get(j).getName() + treinenList.get(i).getComponenten().get(j).getComponentType().getTypeName() + trainConstraint.gridx);
-                if(treinenList.get(i).getComponenten().get(j).getComponentType().getTypeName() == "Locomotief") {
-                    panel.add(trainFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
-                } else if(treinenList.get(i).getComponenten().get(j).getComponentType().getTypeName() == "PassagierWagon") {
-                    panel.add(passengerWagonFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
-                } else {
-                    panel.add(cargoWagonFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
+                //System.out.println(i + treinenList.get(i).getName() + treinenList.get(i).getComponenten().get(j).getName() + " " + treinenList.get(i).getComponenten().get(j).getComponentType().getTypeName() + trainConstraint.gridx);
+                Trein trein = treinenList.get(i);
+                String treinName = trein.getName();
+                RollingComponent component = trein.getComponenten().get(j);
+                String componentName = component.getName();
+                ComponentType type = component.getComponentType();
+                String typeName = type.getTypeName();
+
+                switch (typeName) {
+                    case "Locomotief":
+                        panel.add(trainFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
+                        break;
+                    case "PassagierWagon":
+                        panel.add(passengerWagonFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
+                        break;
+                    case "Vrachtwagon":
+                        panel.add(cargoWagonFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
+                        break;
                 }
             }
             trainConstraint.gridx = 0;
