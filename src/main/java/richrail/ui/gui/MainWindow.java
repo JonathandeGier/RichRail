@@ -1,4 +1,4 @@
-package richrail.ui.java;
+package richrail.ui.gui;
 
 import richrail.service.TreinEventListener;
 import richrail.service.TreinService;

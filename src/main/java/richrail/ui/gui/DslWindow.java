@@ -1,11 +1,10 @@
-package richrail.ui.java;
+package richrail.ui.gui;
 
 import richrail.service.TreinEventListener;
 import richrail.service.TreinService;
 import richrail.ui.dsl.DSLMain;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

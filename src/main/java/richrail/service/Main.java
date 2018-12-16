@@ -3,8 +3,8 @@ package richrail.service;
 import richrail.logging.Logger;
 import richrail.persistence.DataSource;
 import richrail.persistence.JsonFileDataSource;
-import richrail.ui.java.DrawingService;
-import richrail.ui.java.MainWindow;
+import richrail.ui.gui.DrawingService;
+import richrail.ui.gui.MainWindow;
 
 public class Main {
 

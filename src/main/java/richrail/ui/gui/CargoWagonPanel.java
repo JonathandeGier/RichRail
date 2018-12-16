@@ -1,4 +1,4 @@
-package richrail.ui.java;
+package richrail.ui.gui;
 
 import java.awt.*;
 import javax.swing.*;
