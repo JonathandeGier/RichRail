@@ -7,15 +7,11 @@ import java.util.List;
 import richrail.domein.*;
 
 public class TreinController implements TreinService {
-	private static List<Trein> treinen;
-	private static List<RollingComponent> losseComponenten;
-	private static List<TreinEventListener> listeners;
+	private static List<Trein> treinen = new ArrayList<>();
+	private static List<RollingComponent> losseComponenten = new ArrayList<>();
+	private static List<TreinEventListener> listeners = new ArrayList<>();
 	
-	public TreinController() {
-		treinen = new ArrayList<>();
-		losseComponenten = new ArrayList<>();
-		listeners = new ArrayList<>();
-	}
+	public TreinController() {}
 	
 	public boolean newTrein(String name) {
 		if(getTrein(name) == null) {																					// kijken of er al een trein is met dezelfde naam

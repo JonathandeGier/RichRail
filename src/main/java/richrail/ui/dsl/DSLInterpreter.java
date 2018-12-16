@@ -57,9 +57,9 @@ public class DSLInterpreter extends RichRailBaseListener {
 		String type = ctx.type().getText();
 		String name = ctx.ID().getText();
 
-		if(type.equals("wagon")) {
+		if(type.equals("train")) {
 			System.out.println(service.getNumTrainSeats(name));
-		} else if (type.equals("train")) {
+		} else if (type.equals("wagon")) {
 			System.out.println(service.getNumWagonSeats(name));
 		}
 	}
