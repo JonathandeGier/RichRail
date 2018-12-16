@@ -10,7 +10,7 @@ getcommand      : 'getnumseats' type id=ID;
 delcommand      : 'delete' type ID;
 remcommand      : 'remove' ID 'from' ID;
 type            : 'train' | 'wagon';
-componenttype   : 'locomotief' | 'passagierwagon' | 'vrachtwagon';
+componenttype   : 'locomotief' | 'passagiercomponent' | 'vrachtcomponent';
 weight          : NUMBER;
 specialvalue    : NUMBER;
 
