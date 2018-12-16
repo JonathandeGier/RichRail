@@ -21,6 +21,7 @@ public class Logger implements TreinEventListener {
     private void checkForFile() {
         try {
 
+            /*
             if (filePath.getParentFile().mkdirs()) {
                 System.out.println("Directories aangemaakt");
             } else {
@@ -32,6 +33,10 @@ public class Logger implements TreinEventListener {
             } else {
                 System.out.println("File gevonden");
             }
+            */
+
+            filePath.getParentFile().mkdirs();
+            filePath.createNewFile();
 
         } catch (IOException exception) {
             exception.printStackTrace();

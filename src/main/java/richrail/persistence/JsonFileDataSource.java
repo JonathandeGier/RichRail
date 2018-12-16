@@ -5,6 +5,7 @@ import richrail.service.TreinService;
 
 import java.io.*;
 import javax.json.*;
+import javax.json.stream.JsonParsingException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +48,7 @@ public class JsonFileDataSource extends FileDataSource implements TreinEventList
     private void checkForFile() {
         try {
 
+            /*
             if (ioFile.getParentFile().mkdirs()) {
                 System.out.println("Directories aangemaakt");
             } else {
@@ -58,6 +60,10 @@ public class JsonFileDataSource extends FileDataSource implements TreinEventList
             } else {
                 System.out.println("File gevonden");
             }
+            */
+
+            ioFile.getParentFile().mkdirs();
+            ioFile.createNewFile();
 
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -83,18 +89,30 @@ public class JsonFileDataSource extends FileDataSource implements TreinEventList
     @Override
     public void loadTreinen() {
 
+        FileReader inputFile = null;
+        JsonReader jsonReader = null;
+
         try {
             checkForFile();
-            FileReader inputFile = new FileReader(ioFile);
-            JsonReader jsonReader = Json.createReader(inputFile);
+            inputFile = new FileReader(ioFile);
+            jsonReader = Json.createReader(inputFile);
             JsonArray treinenArray = jsonReader.readArray();
-            jsonReader.close();
-            inputFile.close();
 
             processJsonInput(treinenArray);
 
-        } catch (IOException exception) {
+        } catch (IOException | JsonParsingException exception) {
             exception.printStackTrace();
+        } finally {
+            try {
+                if (jsonReader != null) {
+                    jsonReader.close();
+                }
+                if (inputFile != null) {
+                    inputFile.close();
+                }
+            } catch (Exception exception) {
+                System.out.println("Files konden niet gesloten worden");
+            }
         }
 
     }
