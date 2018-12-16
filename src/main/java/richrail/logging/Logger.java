@@ -18,8 +18,30 @@ public class Logger implements TreinEventListener {
         logMessage(timeStamp + " "+ message +"\n");
     }
 
+    private void checkForFile() {
+        try {
+
+            if (filePath.getParentFile().mkdirs()) {
+                System.out.println("Directories aangemaakt");
+            } else {
+                System.out.println("Directories gevonden");
+            }
+
+            if (filePath.createNewFile()) {
+                System.out.println("File aangemaakt");
+            } else {
+                System.out.println("File gevonden");
+            }
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
     private void logMessage(String line) {
         try {
+            checkForFile();
             BufferedWriter outputFile = new BufferedWriter( new FileWriter(filePath, true) );
             outputFile.write(line);
             outputFile.close();

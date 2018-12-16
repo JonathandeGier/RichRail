@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFileDataSource extends FileDataSource implements TreinEventListener {
 
-    private final File ioFile = new File(super.dirPath + "\\treinen.json");
+    private final File ioFile = new File(super.dirPath + "treinen.json");
 
     public JsonFileDataSource(TreinService service) {
         super(service);
@@ -47,12 +47,19 @@ public class JsonFileDataSource extends FileDataSource implements TreinEventList
     private void checkForFile() {
         try {
 
-            if (! ioFile.createNewFile()) {
-                throw new IOException("File could not be created");
+            if (ioFile.getParentFile().mkdirs()) {
+                System.out.println("Directories aangemaakt");
+            } else {
+                System.out.println("Directories gevonden");
+            }
+
+            if (ioFile.createNewFile()) {
+                System.out.println("File aangemaakt");
+            } else {
+                System.out.println("File gevonden");
             }
 
         } catch (IOException exception) {
-            System.out.println(exception.getMessage());
             exception.printStackTrace();
         }
 
@@ -77,6 +84,7 @@ public class JsonFileDataSource extends FileDataSource implements TreinEventList
     public void loadTreinen() {
 
         try {
+            checkForFile();
             FileReader inputFile = new FileReader(ioFile);
             JsonReader jsonReader = Json.createReader(inputFile);
             JsonArray treinenArray = jsonReader.readArray();
