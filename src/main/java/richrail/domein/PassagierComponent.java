@@ -1,7 +1,7 @@
 package richrail.domein;
 
 public class PassagierComponent implements ComponentType {
-	private String type = "PassagierWagon";
+	private String type = "PassagierComponent";
 	private int zitplaatsen;
 	
 	public PassagierComponent(int zitplaatsen) {

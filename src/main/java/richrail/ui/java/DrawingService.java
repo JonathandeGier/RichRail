@@ -22,73 +22,35 @@ public class DrawingService {
         treinService = treinServiceUsed;
     }
 
-    public void drawTrain(JPanel panel, JFrame frame, String trainName) {
-        List<Trein> treinenList = treinService.getAlleTreinen();
-        int trainCounter = 0;
-        for(int i = 0; i < treinenList.size(); i++) {
-            trainCounter++;
-        }
-        trainConstraint.gridy = trainCounter - 1;
-        panel.add(trainFactory(trainName), trainConstraint);
-        frame.setVisible(true);
-    }
-
-    public void clearPanel(JPanel panel) {
+    private void clearPanel(JPanel panel) {
         panel.removeAll();
         panel.revalidate();
         panel.repaint();
     }
 
-    public void drawComponent(JPanel panel, JFrame frame, String wagonName, String trainName, String type) {
-        List<Trein> treinenList = treinService.getAlleTreinen();
-        int trainCounter = 0;
-        int wagonCounter = 0;
-        for(int i = 0; i < treinenList.size(); i++) {
-            if(treinenList.get(i).getName() == trainName) {
-                trainCounter = i;
-                for(int j = 0; j < treinenList.get(i).getComponenten().size(); j++) {
-                    wagonCounter++;
-                }
-            }
-        }
-        wagonConstraint.gridx = wagonCounter;
-        wagonConstraint.gridy = trainCounter;
-        if(type == "locomotive") {
-            panel.add(trainFactory(wagonName), wagonConstraint);
-        } else if (type == "vrachtcomponent") {
-            panel.add(cargoWagonFactory(wagonName), wagonConstraint);
-        } else {
-            panel.add(passengerWagonFactory(wagonName), wagonConstraint);
-        }
-        frame.setVisible(true);
-    }
+    void drawTrains(JPanel panel, JFrame frame) {
 
-    public void drawTrains(JPanel panel, JFrame frame) {
+        clearPanel(panel);
+
         List<Trein> treinenList = treinService.getAlleTreinen();
-        int trainCounter = 0;
-        int wagonCounter = 0;
         for(int i = 0; i < treinenList.size(); i++) {
             trainConstraint.gridy = i;
-            //panel.add(trainFactory(treinenList.get(i).getName()), trainConstraint);
             for(int j = 0; j < treinenList.get(i).getComponenten().size(); j++) {
                 wagonConstraint.gridy = i;
                 wagonConstraint.gridx = j + 1;
-                //System.out.println(i + treinenList.get(i).getName() + treinenList.get(i).getComponenten().get(j).getName() + " " + treinenList.get(i).getComponenten().get(j).getComponentType().getTypeName() + trainConstraint.gridx);
                 Trein trein = treinenList.get(i);
-                String treinName = trein.getName();
                 RollingComponent component = trein.getComponenten().get(j);
-                String componentName = component.getName();
                 ComponentType type = component.getComponentType();
                 String typeName = type.getTypeName();
 
-                switch (typeName) {
-                    case "Locomotief":
+                switch (typeName.toLowerCase()) {
+                    case "locomotief":
                         panel.add(trainFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
                         break;
-                    case "PassagierWagon":
+                    case "passagiercomponent":
                         panel.add(passengerWagonFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
                         break;
-                    case "Vrachtwagon":
+                    case "vrachtcomponent":
                         panel.add(cargoWagonFactory(treinenList.get(i).getComponenten().get(j).getName()), wagonConstraint);
                         break;
                 }

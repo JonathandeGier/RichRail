@@ -233,6 +233,7 @@ public class MainWindow implements TreinEventListener {
 
     private void updateComponentenComboBox(String trainName) {
         int componentCounter = 0;
+        componentSelectionDropdown.removeAllItems();
         if (trainName == null) { return; }
         for(int i = 0; i < treinService.getAlleTreinen().size(); i++) {
             if( treinService.getAlleTreinen().get(i).getName().equals(trainName) ) {
@@ -249,7 +250,6 @@ public class MainWindow implements TreinEventListener {
     }
 
     public void update(String message) {
-        drawingService.clearPanel(drawingPanel);
         drawingService.drawTrains(drawingPanel, mainFrame);
         updateTrainComboBox();
     }
