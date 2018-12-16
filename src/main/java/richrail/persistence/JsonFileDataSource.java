@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonFileDataSource extends FileDataSource {
 
-    private final File ioFile = new File(super.dirPath + "treinen.json");
+    private final File ioFile = new File(super.dirPath + "\\treinen.json");
 
     public JsonFileDataSource(TreinService service) {
         super(service);

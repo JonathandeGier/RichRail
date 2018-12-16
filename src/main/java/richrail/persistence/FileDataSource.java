@@ -7,7 +7,7 @@ import javax.swing.JFileChooser;
 
 public abstract class FileDataSource implements DataSource, TreinEventListener {
 
-    protected final String dirPath = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+    protected final String dirPath = new JFileChooser().getFileSystemView().getDefaultDirectory().toString() + "\\RichRailIO";
     protected TreinService treinService;
 
     protected FileDataSource(TreinService service) {
