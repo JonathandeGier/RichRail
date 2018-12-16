@@ -151,8 +151,12 @@ public class TreinController implements TreinService {
 		return factory.createComponentType(specialeWaarde);
 	}
 
-	public void subscribeToChanges(TreinEventListener listener) { listeners.add(listener); }
-	public void unsubscribeFromChanges(TreinEventListener listener) { listeners.remove(listener); }
+	public void subscribeToChanges(TreinEventListener listener) {
+		listeners.add(listener);
+	}
+	public void unsubscribeFromChanges(TreinEventListener listener) {
+		listeners.remove(listener);
+	}
 
 	public void notifyListeners(String message) {
 
