@@ -1,5 +1,6 @@
 package richrail.persistence;
 
+import richrail.service.TreinEventListener;
 import richrail.service.TreinService;
 
 import java.io.*;
@@ -7,7 +8,7 @@ import javax.json.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonFileDataSource extends FileDataSource {
+public class JsonFileDataSource extends FileDataSource implements TreinEventListener {
 
     private final File ioFile = new File(super.dirPath + "\\treinen.json");
 
