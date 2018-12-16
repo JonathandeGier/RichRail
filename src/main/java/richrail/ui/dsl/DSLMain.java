@@ -1,7 +1,5 @@
 package richrail.ui.dsl;
 
-import java.util.Scanner;
-
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -15,15 +13,6 @@ import parser.RichRailParser;
 import richrail.service.TreinController;
 
 public class DSLMain {
-    public static void dsl() {
-        String input = "";
-        Scanner sc = new Scanner(System.in);
-        while(!input.equals("quit")) {
-            input = sc.nextLine();
-            interpret(input);
-        }
-        sc.close();
-    }
 
     public static void interpret(String text) {
         CharStream lineStream = CharStreams.fromString(text);
